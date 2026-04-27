@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <!-- Sky gradient background -->
+    <radialGradient id="sky" cx="50%" cy="35%" r="65%">
+      <stop offset="0%"  stop-color="#0ea5e9"/>
+      <stop offset="50%" stop-color="#0369a1"/>
+      <stop offset="100%" stop-color="#082f49"/>
+    </radialGradient>
+    <!-- Light ray glow -->
+    <radialGradient id="glow" cx="50%" cy="40%" r="40%">
+      <stop offset="0%"  stop-color="#7dd3fc" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="#38bdf8" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Atom core gradient -->
+    <radialGradient id="core" cx="45%" cy="40%" r="50%">
+      <stop offset="0%"  stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#bae6fd"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </radialGradient>
+    <!-- Clip to rounded square -->
+    <clipPath id="rr">
+      <rect x="0" y="0" width="512" height="512" rx="100" ry="100"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background: deep sky -->
+  <g clip-path="url(#rr)">
+    <rect width="512" height="512" fill="url(#sky)"/>
+
+    <!-- Light rays radiating from center-top -->
+    <g opacity="0.35">
+      <polygon points="256,80 180,480 200,480" fill="#7dd3fc" opacity="0.5"/>
+      <polygon points="256,80 312,480 332,480" fill="#7dd3fc" opacity="0.4"/>
+      <polygon points="256,80 100,480 130,480" fill="#38bdf8" opacity="0.3"/>
+      <polygon points="256,80 382,480 412,480" fill="#38bdf8" opacity="0.3"/>
+      <polygon points="256,80 40,480 80,480"   fill="#0ea5e9" opacity="0.2"/>
+      <polygon points="256,80 432,480 472,480" fill="#0ea5e9" opacity="0.2"/>
+    </g>
+
+    <!-- Central glow -->
+    <circle cx="256" cy="220" r="160" fill="url(#glow)"/>
+
+    <!-- Atom orbits -->
+    <g stroke="#bae6fd" stroke-width="2.5" fill="none" opacity="0.7">
+      <ellipse cx="256" cy="255" rx="130" ry="50" transform="rotate(0 256 255)"/>
+      <ellipse cx="256" cy="255" rx="130" ry="50" transform="rotate(60 256 255)"/>
+      <ellipse cx="256" cy="255" rx="130" ry="50" transform="rotate(120 256 255)"/>
+    </g>
+
+    <!-- Atom core (bright) -->
+    <circle cx="256" cy="255" r="28" fill="url(#core)"/>
+    <circle cx="256" cy="255" r="16" fill="white" opacity="0.8"/>
+
+    <!-- Orbital nodes (agent colors) -->
+    <circle cx="386" cy="255" r="14" fill="#a78bfa">
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="191" cy="368" r="14" fill="#34d399">
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="3s" begin="1s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="191" cy="142" r="14" fill="#fbbf24">
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="3s" begin="2s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Subtle stars in sky -->
+    <circle cx="80"  cy="60"  r="2" fill="#fff" opacity="0.6"/>
+    <circle cx="420" cy="45"  r="1.5" fill="#fff" opacity="0.5"/>
+    <circle cx="440" cy="120" r="2" fill="#fff" opacity="0.4"/>
+    <circle cx="60"  cy="140" r="1.5" fill="#fff" opacity="0.5"/>
+    <circle cx="150" cy="40"  r="1" fill="#fff" opacity="0.4"/>
+    <circle cx="370" cy="80"  r="1" fill="#fff" opacity="0.5"/>
+    <circle cx="100" cy="400" r="1.5" fill="#fff" opacity="0.3"/>
+    <circle cx="430" cy="380" r="1" fill="#fff" opacity="0.3"/>
+  </g>
+</svg>

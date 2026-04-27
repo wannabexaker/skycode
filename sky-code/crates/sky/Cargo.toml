@@ -1,0 +1,36 @@
+[package]
+name = "sky"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "sky"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1.0"
+api = { path = "../api" }
+commands = { path = "../commands" }
+compat-harness = { path = "../compat-harness" }
+crossterm = "0.28"
+dirs = "5"
+pulldown-cmark = "0.13"
+reqwest = { version = "0.12", features = ["blocking"] }
+rustyline = "15"
+runtime = { path = "../runtime" }
+plugins = { path = "../plugins" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json.workspace = true
+syntect = "5"
+tokio = { version = "1", features = ["rt-multi-thread", "time"] }
+toml = "0.8"
+tools = { path = "../tools" }
+tracing = "0.1"
+graph = { path = "../graph" }
+walkdir = "2.5"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+[lints]
+workspace = true

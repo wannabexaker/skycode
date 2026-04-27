@@ -1,0 +1,85 @@
+# Keep repo focused on runtime app code only.
+
+# Ignore everything by default.
+*
+
+# Allow directory traversal.
+!*/
+
+# Keep only root essentials.
+!/.gitignore
+!/README.md
+!/LICENSE
+
+# Keep runtime application folders.
+!/sky-code/
+!/sky-code/**
+!/sky-code-gui/
+!/sky-code-gui/**
+!/sky-code-npm/
+!/sky-code-npm/**
+!/skybridge/
+!/skybridge/**
+
+# Drop docs/dev/agent content even inside runtime folders.
+**/docs/
+**/.github/
+**/.claw/
+**/.claw-agents/
+**/target/
+**/node_modules/
+**/*.md
+**/README.md
+**/LICENSE
+**/build-log.txt
+**/*.tgz
+sky-code-gui/src-tauri/binaries/
+
+# Keep only root README and LICENSE markdown files.
+!/README.md
+!/LICENSE
+
+# Runtime/session/user-specific data.
+.sky/
+.omx/
+
+# Build artifacts and temporary files.
+dist/
+tmp/
+temp/
+*.tmp
+*.rs.bk
+*.pdb
+*.bak
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environments and secrets.
+.env
+.env.local
+.env.*.local
+
+# IDE/OS noise.
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.fleet/
+.helix/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Personal/dev-only files.
+Modelfile.*
+test-results-*.csv
+CLAUDE.md
+NEW-SESSION-PROMPT.md
+.instructions.md
+.prompt.md
+.agent.md
+SKILL.md
+*.guidelines.md

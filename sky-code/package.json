@@ -1,0 +1,44 @@
+{
+  "name": "skycode",
+  "version": "1.0.0-beta.2",
+  "description": "Offline AI coding CLI powered by local models",
+  "license": "MIT",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wannabexaker/skycode.git"
+  },
+  "homepage": "https://github.com/wannabexaker/skycode",
+  "bugs": {
+    "url": "https://github.com/wannabexaker/skycode/issues"
+  },
+  "bin": {
+    "skycode": "bin/skycode.js"
+  },
+  "files": [
+    "bin/",
+    "npm/",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "QUICKSTART.md"
+  ],
+  "scripts": {
+    "postinstall": "node npm/postinstall.js",
+    "prepublishOnly": "npm pack --dry-run"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "ai",
+    "cli",
+    "offline",
+    "ollama",
+    "agent"
+  ],
+  "author": "wannabexaker",
+  "publishConfig": {
+    "access": "public"
+  }
+}

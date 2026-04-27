@@ -1,0 +1,55 @@
+{
+  "productName": "SkyCode",
+  "version": "1.1.0",
+  "identifier": "com.skycode.agent",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "SkyCode — Offline AI Agent",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["msi"],
+    "publisher": "SkyCode Contributors",
+    "copyright": "Copyright (c) 2026 Ioannis (Jiannis) — All Rights Reserved",
+    "category": "DeveloperTool",
+    "shortDescription": "Offline AI Agent — 100% Local, Zero Cloud",
+    "longDescription": "SkyCode is an autonomous AI agent that runs completely offline using local LLMs via Ollama. Built-in tools, task management, session persistence, code analysis. Zero cloud dependencies, full privacy.",
+    "homepage": "https://github.com/skycode/sky-code",
+    "license": "",
+    "licenseFile": "../LICENSE",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+      "externalBin": [
+        "binaries/sky",
+        "binaries/skybridge"
+      ],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper"
+      }
+    }
+  }
+}

@@ -1,0 +1,69 @@
+# Build artifacts
+target/
+dist/
+*.exe
+*.pdb
+
+# Rust
+**/*.rs.bk
+
+# Runtime data (user-specific)
+.sky/
+.omx/
+.clawd-agents/
+.claw/sessions/
+.claw/plugins/installed/
+.claw/plugins/installed.json
+**/.claw/sessions/
+**/.claw/plugins/installed/
+**/.claw/plugins/installed.json
+
+# Personal / dev-only files
+Modelfile.*
+test-results-*.csv
+*-REPORT.md
+SESSION-SUMMARY.md
+PROJECT-STATUS.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.fleet/
+.helix/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+*.bak
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Node (for GUI)
+node_modules/
+.npm
+.eslintcache
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Package build outputs
+*.zip
+*.tar.gz
+*.msi
+*.pkg
+*.dmg
