@@ -1,143 +1,127 @@
-# ϟ Skycode
+# Skycode
 
-**Offline-first AI coding agent. Works with any model. No subscriptions.**
+Offline AI coding agent — tool calling, file operations, git, and multi-agent workflows via local Ollama models
 
-Skycode brings the Claude Code experience to local LLMs — interactive CLI, tool calling, file operations, git commands, multi-agent workflows — all running 100% on your machine via [Ollama](https://ollama.ai).
+## Overview
 
-The key idea: integrate with **any AI**, especially free open-source models. Internally uses the Anthropic SDK format, translated to Ollama's API by SkyBridge — swap models with a single env var.
+Replicates the interactive coding agent experience using local LLMs instead of a cloud API. The CLI uses the Anthropic SDK message format internally; SkyBridge translates that to Ollama's API at runtime. Swapping models requires one env var change. No external API calls, no telemetry, no subscription.
 
----
+## Features
 
-## Monorepo Structure
+- Interactive terminal chat with tool calling — file read/write, shell execution, git commands, web search
+- Three operating modes: chat, agent (workspace-write), and multi-agent team workflows
+- Slash commands: `/model`, `/agents`, `/skills`, `/doctor`, `/config`
+- Model alias system — maps short names (`cloud-apus-4-6`, `sky-haiku-4`) to Ollama model names; any Ollama model name works directly
+- Pre-built binaries distributed via npm — no Rust toolchain needed for end users
+- Desktop GUI via Tauri 2 (beta) — chat functional; sessions and settings panel pending
+- Zero telemetry — all state stored locally in `.sky/` (gitignored)
+- `unsafe_code = "forbid"` enforced across all 11 Rust crates at compile time
+
+## Architecture
+
+```
+CLI / GUI  →  SkyBridge :4000  →  Ollama :11434  →  local model
+```
+
+SkyBridge is an Axum HTTP proxy that speaks Anthropic API inward and Ollama API outward. The CLI engine (`sky-code`) is built as a Rust workspace of 11 crates. The Tauri GUI wraps the CLI in a desktop shell. The npm package bundles pre-built Windows and Linux binaries.
+
+### Components
+
+| Component | Role |
+|---|---|
+| `sky-code/` | Rust workspace (11 crates) — main CLI engine |
+| `skybridge/` | Rust Axum proxy — Anthropic ↔ Ollama API translation; listens on :4000 |
+| `sky-code-npm/` | npm distribution package — pre-built binaries for Windows and Linux |
+| `sky-code-gui/` | Tauri 2 desktop GUI — React + TypeScript frontend over the CLI |
+
+## Tech Stack
+
+| Technology | Role |
+|---|---|
+| Rust 1.83+ | CLI engine and SkyBridge proxy |
+| Axum | HTTP framework for SkyBridge |
+| Tauri 2 | Desktop GUI shell |
+| React + TypeScript | GUI frontend |
+| Ollama | Local LLM runtime (external dependency) |
+| npm | Binary distribution |
+
+## Installation
+
+### Via npm (no Rust required)
+
+```bash
+npm install -g sky-code
+```
+
+### From source
+
+```bash
+# Requirements: Rust 1.83+, Ollama running
+
+# CLI
+cd sky-code
+cargo build --release
+
+# Proxy
+cd skybridge
+cargo build --release
+
+# Desktop GUI (requires Node.js 18+)
+cd sky-code-gui
+npm install && npm run tauri dev
+```
+
+Pull at least one model before first run:
+
+```bash
+ollama pull llama3.1:8b
+```
+
+## Usage
+
+```powershell
+# Interactive terminal agent (Windows)
+cd sky-code
+.\sky.bat
+
+# Web UI at http://localhost:4321
+.\skyui.bat
+```
+
+```bash
+# One-shot prompt (npm install)
+skycode prompt "Explain this function"
+```
+
+| Env Var | Default | Description |
+|---|---|---|
+| `FILANTHROPIC_BASE_URL` | `http://localhost:4000` | SkyBridge endpoint |
+| `FILANTHROPIC_API_KEY` | `ollama` | Any non-empty value |
+| `FILANTHROPIC_MODEL` | `cloud-apus-4-6` | Model alias or Ollama model name |
+| `OLLAMA_BASE_URL` | `http://localhost:11434` | Ollama server |
+
+To switch models, set `FILANTHROPIC_MODEL` to any Ollama model name or a defined alias.
+
+## Project Structure
 
 ```
 skycode/
-├── sky-code/          # Rust workspace — main CLI engine (11 crates)
-├── skybridge/         # Rust Axum proxy — Anthropic ↔ Ollama translator
-├── sky-code-npm/      # npm distribution package + pre-built binaries
-└── sky-code-gui/      # Tauri 2 desktop GUI (React + TypeScript)
+├── sky-code/             — Rust workspace (11 crates); main CLI engine
+├── skybridge/            — Rust Axum proxy; Anthropic ↔ Ollama translation
+├── sky-code-npm/         — npm package; pre-built binaries
+├── sky-code-gui/         — Tauri 2 desktop GUI (beta)
+└── sky-code/
+    └── .sky/             — local state (gitignored)
 ```
 
-## How It Works
+## Notes
 
-```
-You → sky (CLI or GUI) → SkyBridge :4000 → Ollama :11434 → local model
-```
+SkyBridge's proxy layer means the CLI is not coupled to Ollama specifically — any backend that speaks the Anthropic Messages API (including the real Anthropic API) works by pointing `FILANTHROPIC_BASE_URL` at it.
 
-SkyBridge is the key piece: it speaks Anthropic API inward, Ollama API outward. This means any Ollama-compatible model (llama3, deepseek-coder, qwen, phi, mistral, gemma…) works out of the box.
+Team Agents (`/agents`) are partially implemented. Multi-agent workflow coordination compiles and initializes but some workflow types are incomplete.
 
----
-
-## Quick Start
-
-### Requirements
-- [Ollama](https://ollama.ai/download) with at least one model pulled
-- Windows 10/11 x64 (Linux also supported, macOS coming)
-
-### Install a model
-```bash
-ollama pull llama3.1:8b
-# or lighter:
-ollama pull llama3.2:1b
-```
-
-### Run (no build needed — pre-built binaries included)
-```powershell
-cd sky-code
-.\sky.bat        # interactive terminal chat
-.\skyui.bat      # web UI at http://localhost:4321
-```
-
-### Or install via npm
-```bash
-npm install -g sky-code
-skycode prompt "What is 2+2?"
-```
-
----
-
-## Three Modes
-
-| Mode | How to enter | What it does |
-|------|-------------|--------------|
-| **Chat** | Default | Pure conversation |
-| **Agent** | `--permission-mode workspace-write` | Tool calling: files, git, terminal, web search, tasks |
-| **Team Agents** | `/agents` slash command | Multi-agent parallel workflows |
-
----
-
-## Slash Commands
-
-| Command | Description |
-|---------|-------------|
-| `/model` | Switch active model |
-| `/agents` | Configure agent team |
-| `/skills` | List available skills |
-| `/doctor` | Health check |
-| `/config` | Show configuration |
-
----
-
-## Configuration
-
-| Env Var | Default | Description |
-|---------|---------|-------------|
-| `FILANTHROPIC_BASE_URL` | `http://localhost:4000` | SkyBridge endpoint |
-| `FILANTHROPIC_API_KEY` | `ollama` | Any value works locally |
-| `FILANTHROPIC_MODEL` | `cloud-apus-4-6` | Model alias or Ollama model name |
-| `OLLAMA_BASE_URL` | `http://localhost:11434` | Ollama server (used by SkyBridge) |
-
-**Model aliases:**
-
-| Alias | Maps to |
-|-------|---------|
-| `cloud-apus-4-6` | `llama3.1:8b` |
-| `sky-sannet-4-6` | balanced mid-size model |
-| `sky-haiku-4` | fast/lightweight model |
-
-Or use any Ollama model name directly.
-
----
-
-## Building from Source
-
-Requires: Rust 1.83+, Node.js 18+ (GUI only)
-
-```powershell
-# CLI
-cd sky-code && cargo build --release
-
-# Proxy
-cd skybridge && cargo build --release
-
-# Desktop GUI
-cd sky-code-gui && npm install && npm run tauri dev
-```
-
----
-
-## Status
-
-| Component | Status |
-|-----------|--------|
-| sky-code CLI | ✅ Production-ready |
-| skybridge proxy | ✅ Production-ready |
-| npm package | ✅ Functional (win/linux binaries bundled) |
-| Tauri GUI | 🔶 Beta (chat works, sessions/settings pending) |
-| Team Agents | 🔶 Partial |
-
----
-
-## Privacy
-
-- Zero telemetry, zero external API calls
-- All data stays in `.sky/` (local, gitignored)
-- GDPR/CCPA compliant by design
-
----
+macOS support is not currently included in the pre-built binaries. Building from source on macOS should work but is untested.
 
 ## License
 
 MIT — see [LICENSE](LICENSE)
-
-© 2026 — Independent project, no affiliation with Anthropic PBC
